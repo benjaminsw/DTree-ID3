@@ -1,0 +1,25 @@
+//Loop over image array elements and count occurrences of each possible
+//pixel to pixel difference value. Store these values in prob_array
+for j = 0, ysize-1 do $
+    for i = 0, xsize-2 do begin
+       diff = array(i+1,j) - array(i,j)
+       if diff lt (array_size+1)/2 and diff gt -(array_size+1)/2 then begin
+            prob_array(diff+(array_size-1)/2) = prob_array(diff+(array_size-1)/2) + 1
+       endif
+     endfor
+
+//Convert values in prob_array to probabilities and compute entropy
+n = total(prob_array)
+
+entrop = 0
+for i = 0, array_size-1 do begin
+    prob_array(i) = prob_array(i)/n
+
+    //Base 2 log of x is Ln(x)/Ln(2). Take Ln of array element
+    //here and divide final sum by Ln(2)
+    if prob_array(i) ne 0 then begin
+        entrop = entrop - prob_array(i)*alog(prob_array(i))
+    endif
+endfor
+
+entrop = entrop/alog(2)
